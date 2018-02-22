@@ -1,0 +1,140 @@
+#pragma comment(linker, "/STACK:256000000")
+#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_DEPRECATE
+#include<iostream>
+#include<cstdio>
+#include<cstdlib>
+#include<string>
+#include<cstring>
+#include<algorithm>
+#include<cmath>
+#include <set>
+#include <queue>
+#include <map>
+#include <vector>
+#include <assert.h>
+#include <unordered_map>
+#include <math.h>
+
+#define M_E        2.71828182845904523536   // e
+#define M_LOG2E    1.44269504088896340736   // log2(e)
+#define M_LOG10E   0.434294481903251827651  // log10(e)
+#define M_LN2      0.693147180559945309417  // ln(2)
+#define M_LN10     2.30258509299404568402   // ln(10)
+#define M_PI       3.14159265358979323846   // pi
+#define M_PI_2     1.57079632679489661923   // pi/2
+#define M_PI_4     0.785398163397448309616  // pi/4
+#define M_1_PI     0.318309886183790671538  // 1/pi
+#define M_2_PI     0.636619772367581343076  // 2/pi
+#define M_2_SQRTPI 1.12837916709551257390   // 2/sqrt(pi)
+#define M_SQRT2    1.41421356237309504880   // sqrt(2)
+#define M_SQRT1_2  0.707106781186547524401  // 1/sqrt(2)
+
+using namespace std;
+#define mp make_pair
+typedef long long ll;
+typedef long double ldb;
+typedef double db;
+typedef pair <int, int> pii;
+typedef pair <ll, ll> pll;
+typedef pair <db, db> pdbdb;
+const int nmax = 1000100;
+ll res, cnt = 1e+16;
+db eps = 1e-5;
+ll n, q, k, l, r, m, sm, a, b, x, c, n1, d;
+ll el[100010];
+set <ll> ans;
+vector <ll> vr;
+int main()
+{
+	//freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);
+	ios_base::sync_with_stdio(0); cin.tie(0);
+	cin >> n >> m >> q;
+	a = 1;
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> b;
+		sm += b * a;
+		a *= -1;
+	}
+	for (int i = 1; i <= m; ++i)
+	{
+		cin >> el[i];
+	}
+	a = -1;
+	for (int i = 1; i <= n; ++i)
+	{
+		l += el[i] * a;
+		a *= -1;
+	}
+	a *= -1;
+	ans.insert(l);
+	for (int i = n + 1; i <= m; ++i)
+	{
+		l += el[i - n];
+		l *= -1;
+		l += a * el[i];
+
+		ans.insert(l);
+
+	}
+	auto it = ans.lower_bound(-sm);
+	if (it == ans.end())
+	{
+		--it;
+		d = *it;
+		cout << abs(d + sm) << endl;
+	}
+	else
+	{
+		if (it != ans.begin())
+		{
+			k = *it;
+			--it;
+			d = *it;
+			cout << min(abs(d + sm), abs(k + sm)) << endl;
+		}
+		else
+		{
+			k = *it;
+			cout << abs(k + sm) << endl;
+		}
+	}
+	
+	for (int i = 0; i < q; ++i)
+	{
+		cin >> l >> r >> x;
+		if ((r - l + 1) & 1)
+		{
+			if (r & 1)
+				sm += x;
+			else
+				sm -= x;
+
+		}
+			
+		auto it = ans.lower_bound(-sm);
+		if (it == ans.end())
+		{
+			--it;
+			d = *it;
+			cout << abs(d + sm) << endl;
+		}
+		else
+		{
+			if (it != ans.begin())
+			{
+				k = *it;
+				--it;
+				d = *it;
+				cout << min(abs(d + sm), abs(k + sm)) << endl;
+			}
+			else
+			{
+				k = *it;
+				cout << abs(k + sm) << endl;
+			}
+		}
+	}
+	return 0;
+}

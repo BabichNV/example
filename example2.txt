@@ -1,0 +1,135 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<cstdio>
+#include<iostream>
+#include<cstdlib>
+#include<cmath>
+#include<algorithm>
+#include<set>
+#include<map>
+#include<unordered_set>
+#include<unordered_map>
+#include<string>
+#include<cstring>
+#include <vector>
+#include <bitset>
+
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+typedef double db;
+typedef long double ldb;
+typedef pair <int, int> pii;
+typedef pair <ll, ll> pll;
+#define mp make_pair
+const int nmax = 1000010;
+ll MIN = ((ll)1 << 63) - 1;
+ll MAX = -MIN;
+int n, k;
+string str[5001];
+int met[200], met1[200];
+vector <int> vr;
+void solve()
+{
+	cin >> k >> n;
+	for (int i = 1; i <= k; ++i)
+	{
+		cin >> str[i]; 
+	}
+	int cnt = 0;
+	int pos = 0;
+	for (int i = 1; i <= k; ++i)
+	{
+		if (pos)
+			break;
+		for (int j = i + 1; j <= k; ++j)
+		{
+			for (int x = 0; x < n; ++x)
+			{
+				if (str[i][x] != str[j][x])
+					vr.push_back(x);
+			}
+			if (vr.empty())
+			{
+				++cnt;
+				continue;
+			}
+			if (vr.size() > 4)
+			{
+				cout << -1 << endl;
+				return;
+			}
+			else
+			{
+				pos = i;
+				break;
+			}
+		}
+	}
+	if (cnt == k * (k - 1) / 2)
+	{
+		swap(str[1][0], str[1][1]);
+		cout << str[1] << endl;
+		return;
+	}
+	for (int i = 0; i < vr.size(); ++i)
+	{
+		int v = vr[i];
+		string s1 = str[pos];
+		int cn, cn1 = 0;
+		for (int j = 0; j < n; ++j)
+		{
+			swap(s1[j], s1[v]);
+			int dif = 0;
+			memset(met, 0, sizeof(met));
+			for (int x = 0; x < n; ++x)
+			{
+				++met[s1[x]];
+				if (met[s1[x]] > 1)
+				{
+					++dif;
+					
+				}
+			}
+			cn1 = 0;
+			for (int x = 1; x <= k; ++x)
+			{
+				cn = 0;
+				memset(met1, 0, sizeof(met1));
+				for (int y = 0; y < n; ++y)
+					++met1[str[x][y]];
+				int cn3 = 0;
+				for (int y = 'a'; y <= 'z'; ++y)
+				{
+					cn3 += (met1[y] != met[y]);
+				}
+				if (cn3)
+					continue;
+				for (int y = 0; y < n; ++y)
+				{
+					cn += (str[x][y] != s1[y]);
+				}
+				if (cn == 2 || (cn == 0 && dif))
+					++cn1;
+			}
+			if (cn1 == k)
+			{
+				cout << s1 << endl;
+				return;
+			}
+			swap(s1[j], s1[v]);
+		}
+	}
+
+	cout << -1 << endl;
+}
+int main()
+{
+	//freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);
+	int t = 1;
+	//cin >> t;
+	for (int i = 0; i < t; ++i)
+	{
+		solve();
+	}
+	return 0;
+}
